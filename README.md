@@ -200,7 +200,44 @@ http_response_size_bytes_count{method="POST",route="/graphql",code="200"} 2
 # TYPE http_requests_total counter
 http_requests_total{route="/graphql",method="POST",code="200"} 2
   ```
-<details>
+</details>
+
+## Running Prometheus & Grafana
+
+> This step assumes you have `docker` and `docker-compose` set up. If not, [install docker here](https://docs.docker.com/install/) and [install docker-compose-here](https://docs.docker.com/compose/install/)
+
+The easiest way to run both Prometheus and Grafana is to create a `docker-compose.yaml` file and add the following:
+
+```yaml
+version: '3'
+services:
+  prometheus:
+    image: "prom/prometheus"
+    ports:
+     - "9090:9090"
+    volumes:
+     - data:/prometheus-data
+  grafana:
+    image: "grafana/grafana"
+    depends_on:
+      - prometheus
+    ports:
+     - "3000:3000"
+
+volumes:
+  data:
+```
+
+Now run both images using:
+
+```sh
+docker-compose up
+```
+
+If you want to run both images as a background process, using the `-d` flag with `docker-compose up`.
+
+This will pull the `prometheus` and `grafana` images from their respective registries and expose them on port `9090` and `3000` respectively.
+
 
 ## Debugging
 
